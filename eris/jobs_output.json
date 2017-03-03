@@ -1,0 +1,9 @@
+{
+  "assertStorage": "passed",
+  "defaultAddr": "C9A8F21232C4F3BA0080C0FE88F5AECB880936F7",
+  "deployContractK": "587E707C52A6AA235D1BED6309954FCBB7839173",
+  "deployStorageK": "44D9C530D3C27A42CBD12AFC7867828D9399E610",
+  "queryStorage": "5",
+  "setStorage": "",
+  "setStorageBase": "5"
+}

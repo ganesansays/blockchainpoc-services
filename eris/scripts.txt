@@ -1,0 +1,39 @@
+-- Start Blockchain
+eris chains make --account-types=Root:1,Validator:3 myadvchain
+
+docker-machine create --driver amazonec2 root-000 -y
+eris init --machine root-000 advchain --yes
+eris chains start myadvchain --init-dir myadvchain/myadvchain_root_000 --machine "root-000" myadvchain
+
+for i in `seq 0 2`
+do
+  docker-machine create --driver amazonec2 "validator-00$i" -y
+done
+
+--Make sure the ips of the docker machines are added to the seeds
+
+for i in `seq 0 2`
+do
+  eris init --machine "validator-00$i" advchain --yes
+  eris chains start myadvchain --init-dir myadvchain/"myadvchain_validator_00$i" --machine "validator-00$i" myadvchain --logrotate
+done
+
+--deloy contracts
+addr=$(cat ~/.eris/chains/myadvchain/addresses.csv | grep myadvchain_root_000 | cut -d ',' -f 1)
+echo $addr
+eris pkgs do --chain myadvchain --address $addr --machine root-000
+
+-- Stop and cleanup the chain
+for i in `seq 0 2`
+do
+  eris chains stop --machine "validator-00$i" myadvchain
+  eris chains rm --machine "validator-00$i" myadvchain
+done
+
+--remove docker images
+for i in `seq 0 2`
+do
+  docker-machine rm "validator-00$i" --y
+done
+
+docker-machine rm root-000 -y

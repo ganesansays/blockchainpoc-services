@@ -1,0 +1,388 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /contracts:
+    x-swagger-router-controller: contract
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: contracts
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              # a pointer to a definition
+              type: string
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: contract
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: contract
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Contract"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/startContract:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: contract
+    put:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: startContract
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: contract
+          in: body
+          description: Name of the contract
+          required: true
+          schema:
+            $ref: '#/definitions/Contract'
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/packages:
+    x-swagger-router-controller: package
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: packages
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              type: string
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/package:
+    x-swagger-router-controller: package
+    put:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: putPackage
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: package
+          in: body
+          description: Name of the contract
+          required: false
+          schema:
+            $ref: "#/definitions/Package"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/package/{packageName}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: package
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: package
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: packageName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Package"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/parties:
+    x-swagger-router-controller: party
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: parties
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              # a pointer to a definition
+              type: string
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/party/{partyName}:
+    x-swagger-router-controller: party
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: party
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: partyName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Party"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/party/{partyName}/startTransporting:
+    x-swagger-router-controller: party
+    put:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: startTransporting
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: partyName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: package
+          in: body
+          description: Name of the contract
+          required: true
+          schema:
+            $ref: "#/definitions/Package"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/party/{partyName}/stopTransporting:
+    x-swagger-router-controller: party
+    put:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: stopTransporting
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: partyName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: package
+          in: body
+          description: Name of the contract
+          required: true
+          schema:
+            $ref: "#/definitions/Package"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /contract/{contractName}/party/{partyName}/handOver:
+    x-swagger-router-controller: party
+    put:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: handOver
+      parameters:
+        - name: contractName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: partyName
+          in: path
+          description: Name of the contract
+          required: true
+          type: string
+        - name: package
+          in: body
+          description: Name of the contract
+          required: true
+          schema:
+            $ref: "#/definitions/Package" 
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  Contract:
+    required:
+      - contractTemperature
+      - contractName
+    properties:
+      contractTemperature:
+        type: integer
+      contractName:
+        type: string
+  Package:
+    required:
+      - packageTemperature
+      - packageName
+    properties:
+      packageTemperature:
+        type: integer
+      packageName:
+        type: string
+  Party:
+    required:
+      - name
+      - handOverParty
+      - owner
+      - transporting
+      - transported
+      - breached
+      - breachTemperature
+      - handedOver
+      - handedOverTemperature
+    properties:
+      name:
+        type: string
+      handOverParty:
+        type: string
+      owner:
+        type: boolean
+      transporting:
+        type: boolean
+      transported:
+        type: boolean
+      breached:
+        type: boolean
+      breachTemperature:
+        type: integer
+      handedOver:
+        type: boolean
+      handedOverTemperature:
+        type: integer
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  SuccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
